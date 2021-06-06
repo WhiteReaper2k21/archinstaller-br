@@ -120,8 +120,9 @@ class SysCommandWorker:
 
 	def __contains__(self, key: bytes):
 		"""
-		Contains will also move the current buffert position forward.
-		This is to avoid re-checking the same data when looking for output.
+		Contém também moverá a posição atual do buffert para frente.
+	    Isso evita verificar novamente os mesmos dados ao procurar a saída
+
 		"""
 		assert type(key) == bytes
 
@@ -164,7 +165,7 @@ class SysCommandWorker:
 			log(args[1], level=logging.ERROR, fg='red')
 
 		if self.exit_code != 0:
-			raise SysCallError(f"{self.cmd} exited with abnormal exit code: {self.exit_code}")
+			raise SysCallError(f"{self.cmd} saiu com código de saída anormal: {self.exit_code}")
 
 	def is_alive(self):
 		self.poll()
@@ -268,7 +269,7 @@ class SysCommandWorker:
 				if storage['arguments'].get('debug'):
 					log(f"Executing: {self.cmd}", level=logging.DEBUG)
 			except FileNotFoundError:
-				log(f"{self.cmd[0]} does not exist.", level=logging.ERROR, fg="red")
+				log(f"{self.cmd[0]} não existe. ", level=logging.ERROR, fg="red")
 				self.exit_code = 1
 				return False
 
@@ -358,7 +359,7 @@ class SysCommand:
 
 def prerequisite_check():
 	if not os.path.isdir("/sys/firmware/efi"):
-		raise RequirementError("Archinstall only supports machines in UEFI mode.")
+		raise RequirementError("Archinstall apenas oferece suporte a máquinas no modo UEFI.")
 
 	return True
 

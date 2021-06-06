@@ -12,26 +12,26 @@ __packages__ = ["base", "base-devel", "linux-firmware", "linux", "linux-lts", "l
 
 class Installer:
 	"""
-	`Installer()` is the wrapper for most basic installation steps.
-	It also wraps :py:func:`~archinstall.Installer.pacstrap` among other things.
+	`Installer ()` é o invólucro para a maioria das etapas básicas de instalação.
+     Ele também envolve: py: func: `~ archinstall.Installer.pacstrap` entre outras coisas.
 
-	:param partition: Requires a partition as the first argument, this is
-		so that the installer can mount to `mountpoint` and strap packages there.
-	:type partition: class:`archinstall.Partition`
+    : param partição: Requer uma partição como o primeiro argumento, este é
+    para que o instalador possa montar em `mountpoint` e amarrar pacotes lá.
+     : tipo partição: classe: `archinstall.Partition`
 
-	:param boot_partition: There's two reasons for needing a boot partition argument,
-		The first being so that `mkinitcpio` can place the `vmlinuz` kernel at the right place
-		during the `pacstrap` or `linux` and the base packages for a minimal installation.
-		The second being when :py:func:`~archinstall.Installer.add_bootloader` is called,
-		A `boot_partition` must be known to the installer before this is called.
-	:type boot_partition: class:`archinstall.Partition`
+    : param boot_partition: Há duas razões para a necessidade de um argumento de partição de inicialização,
+    O primeiro é para que `mkinitcpio` possa colocar o kernel` vmlinuz` no lugar certo
+    durante o `pacstrap` ou` linux` e os pacotes básicos para uma instalação mínima.
+    O segundo sendo quando: py: func: `~ archinstall.Installer.add_bootloader` é chamado,
+    Uma `boot_partition` deve ser conhecida pelo instalador antes de ser chamada.
+    : digite boot_partition: class: `archinstall.Partition`
 
-	:param profile: A profile to install, this is optional and can be called later manually.
-		This just simplifies the process by not having to call :py:func:`~archinstall.Installer.install_profile` later on.
-	:type profile: str, optional
+    : param profile: Um perfil para instalar, isso é opcional e pode ser chamado manualmente mais tarde.
+    Isso simplifica o processo por não ter que chamar: py: func: `~ archinstall.Installer.install_profile` posteriormente.
+    : tipo de perfil: str, opcional
 
-	:param hostname: The given /etc/hostname for the machine.
-	:type hostname: str, optional
+    : param hostname: O / etc / hostname fornecido para a máquina.
+    : digite hostname: str, opcional
 
 	"""
 
@@ -93,17 +93,17 @@ class Installer:
 		self.genfstab()
 
 		if not (missing_steps := self.post_install_check()):
-			self.log('Installation completed without any errors. You may now reboot.', fg='green', level=logging.INFO)
+			self.log('A instalação foi concluída sem erros. Agora você pode reiniciar.', fg='green', level=logging.INFO)
 			self.sync_log_to_install_medium()
 
 			return True
 		else:
-			self.log('Some required steps were not successfully installed/configured before leaving the installer:', fg='red', level=logging.WARNING)
+			self.log('Algumas etapas necessárias não foram instaladas / configuradas com êxito antes de sair do instalador:', fg='red', level=logging.WARNING)
 			for step in missing_steps:
 				self.log(f' - {step}', fg='red', level=logging.WARNING)
 
-			self.log(f"Detailed error logs can be found at: {storage['LOG_PATH']}", level=logging.WARNING)
-			self.log("Submit this zip file as an issue to https://github.com/archlinux/archinstall/issues", level=logging.WARNING)
+			self.log(f"Registros de erros detalhados podem ser encontrados em: {storage['LOG_PATH']}", level=logging.WARNING)
+			self.log("Envie este arquivo zip como um problema para https://github.com/WhiteReaper2k21/archinstaller-br/issues", level=logging.WARNING)
 
 			self.sync_log_to_install_medium()
 			return False
@@ -146,9 +146,9 @@ class Installer:
 			if (pacstrap := SysCommand(f'/usr/bin/pacstrap {self.target} {" ".join(packages)}', peak_output=True)).exit_code == 0:
 				return True
 			else:
-				self.log(f'Could not strap in packages: {pacstrap.exit_code}', level=logging.INFO)
+				self.log(f'Não foi possível amarrar os pacotes: {pacstrap.exit_code}', level=logging.INFO)
 		else:
-			self.log(f'Could not sync mirrors: {sync_mirrors.exit_code}', level=logging.INFO)
+			self.log(f'Não foi possível sincronizar os espelhos: {sync_mirrors.exit_code}', level=logging.INFO)
 
 	def set_mirrors(self, mirrors):
 		for plugin in plugins.values():
@@ -165,7 +165,7 @@ class Installer:
 			fstab_fh.write(SysCommand(f'/usr/bin/genfstab {flags} {self.target}').decode())
 
 		if not os.path.isfile(f'{self.target}/etc/fstab'):
-			raise RequirementError(f'Could not generate fstab, strapping in packages most likely failed (disk out of space?)\n{fstab}')
+			raise RequirementError(f'Não foi possível gerar fstab, amarrando em pacotes provavelmente falhou (disco sem espaço?)\n{fstab}')
 
 		for plugin in plugins.values():
 			if hasattr(plugin, 'on_genfstab'):
@@ -376,7 +376,7 @@ class Installer:
 				if (ucode := pathlib.Path(f"{self.target}/boot/intel-ucode.img")).exists():
 					ucode.unlink()
 			else:
-				self.log(f"Unknown CPU vendor '{vendor}' detected. Archinstall won't install any ucode.", level=logging.DEBUG)
+				self.log(f"Fornecedor desconhecido de CPU '{vendor}' detectou. Archinstall não instala nenhum ucode.", level=logging.DEBUG)
 
 		self.pacstrap(self.base_packages)
 		self.helper_flags['base-strapped'] = True
@@ -400,7 +400,7 @@ class Installer:
 
 		# Run registered post-install hooks
 		for function in self.post_base_install:
-			self.log(f"Running post-installation hook: {function}", level=logging.INFO)
+			self.log(f"Executando o gancho de pós-instalação: {function}", level=logging.INFO)
 			function(self)
 
 		for plugin in plugins.values():
@@ -425,7 +425,7 @@ class Installer:
 			elif partition.mountpoint == self.target:
 				root_partition = partition
 
-		self.log(f'Adding bootloader {bootloader} to {boot_partition if boot_partition else root_partition}', level=logging.INFO)
+		self.log(f'Adicionando bootloader {bootloader} para {boot_partition if boot_partition else root_partition}', level=logging.INFO)
 
 		if bootloader == 'systemd-bootctl':
 			self.pacstrap('efibootmgr')
@@ -483,7 +483,7 @@ class Installer:
 						elif vendor == "GenuineIntel":
 							entry.write("initrd /intel-ucode.img\n")
 						else:
-							self.log("unknow cpu vendor, not adding ucode to systemd-boot config")
+							self.log("fornecedor desconhecido de CPU, não adicionando ucode à configuração de inicialização do systemd")
 					entry.write(f"initrd /initramfs-{kernel}.img\n")
 					# blkid doesn't trigger on loopback devices really well,
 					# so we'll use the old manual method until we get that sorted out.
@@ -529,11 +529,11 @@ class Installer:
 		if type(profile) == str:
 			profile = Profile(self, profile)
 
-		self.log(f'Installing network profile {profile}', level=logging.INFO)
+		self.log(f'Instalando perfil de rede {profile}', level=logging.INFO)
 		return profile.install()
 
 	def enable_sudo(self, entity: str, group=False):
-		self.log(f'Enabling sudo permissions for {entity}.', level=logging.INFO)
+		self.log(f'Ativando permissões de sudo para {entity}.', level=logging.INFO)
 		with open(f'{self.target}/etc/sudoers', 'a') as sudoers:
 			sudoers.write(f'{"%" if group else ""}{entity} ALL=(ALL) ALL\n')
 		return True
@@ -565,7 +565,7 @@ class Installer:
 			self.helper_flags['user'] = True
 
 	def user_set_pw(self, user, password):
-		self.log(f'Setting password for {user}', level=logging.INFO)
+		self.log(f'Configurando senha para {user}', level=logging.INFO)
 
 		if user == 'root':
 			# This means the root account isn't locked/disabled with * in /etc/passwd
@@ -583,7 +583,7 @@ class Installer:
 	def set_keyboard_language(self, language: str) -> bool:
 		if len(language.strip()):
 			if not verify_keyboard_layout(language):
-				self.log(f"Invalid keyboard language specified: {language}", fg="red", level=logging.ERROR)
+				self.log(f"Idioma de teclado inválido especificado: {language}", fg="red", level=logging.ERROR)
 				return False
 
 			# In accordance with https://github.com/archlinux/archinstall/issues/107#issuecomment-841701968
