@@ -40,7 +40,7 @@ def check_for_correct_username(username):
 	if re.match(r'^[a-z_][a-z0-9_-]*\$?$', username) and len(username) <= 32:
 		return True
 	log(
-		"The username you entered is invalid. Try again",
+		"O nome de usuário que você inseriu é inválido. Tente novamente",
 		level=logging.WARNING,
 		fg='red'
 	)
@@ -71,7 +71,7 @@ def do_countdown():
 			print(".", end='')
 
 		if SIG_TRIGGER:
-			abort = input('\nDo you really want to abort (y/n)? ')
+			abort = input('\ nVocê realmente deseja abortar (s / n)? ')
 			if abort.strip() != 'n':
 				exit(0)
 
@@ -86,9 +86,9 @@ def do_countdown():
 
 def get_password(prompt="Enter a password: "):
 	while passwd := getpass.getpass(prompt):
-		passwd_verification = getpass.getpass(prompt='And one more time for verification: ')
+		passwd_verification = getpass.getpass(prompt='E mais uma vez para verificação: ')
 		if passwd != passwd_verification:
-			log(' * Passwords did not match * ', fg='red')
+			log('* As senhas não correspondem * ', fg='red')
 			continue
 
 		if len(passwd.strip()) <= 0:
@@ -119,7 +119,7 @@ def print_large_list(options, padding=5, margin_bottom=0, separator=': '):
 	return column, row
 
 
-def generic_multi_select(options, text="Select one or more of the options above (leave blank to continue): ", sort=True, default=None, allow_empty=False):
+def generic_multi_select(options, text="Selecione uma ou mais das opções acima (deixe em branco para continuar): ", sort=True, default=None, allow_empty=False):
 	# Checking if the options are different from `list` or `dict` or if they are empty
 	if type(options) not in [list, dict]:
 		log(f" * Generic multi-select doesn't support ({type(options)}) as type of options * ", fg='red')
@@ -169,7 +169,7 @@ def generic_multi_select(options, text="Select one or more of the options above 
 				elif selected_options or allow_empty:
 					break
 				else:
-					raise RequirementError('Please select at least one option to continue')
+					raise RequirementError('Selecione pelo menos uma opção para continuar')
 			elif selected_option.isnumeric():
 				if (selected_option := int(selected_option)) >= len(options):
 					raise RequirementError(f'Selected option "{selected_option}" is out of range')
@@ -308,7 +308,7 @@ class MiniCurses:
 			return response
 
 
-def ask_for_superuser_account(prompt='Username for required superuser with sudo privileges: ', forced=False):
+def ask_for_superuser_account(prompt='Nome de usuário para o superusuário obrigatório com privilégios sudo: ', forced=False):
 	while 1:
 		new_user = input(prompt).strip(' ')
 

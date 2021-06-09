@@ -55,7 +55,7 @@ def import_via_path(path :str, namespace=None): # -> module (not sure how to wri
 		return namespace
 	except Exception as err:
 		log(err, level=logging.ERROR)
-		log(f"The above error was detected when loading the plugin: {path}", fg="red", level=logging.ERROR)
+		log(f"O erro acima foi detectado ao carregar o plugin:  {path}", fg="red", level=logging.ERROR)
 
 		try:
 			del(sys.modules[namespace])
@@ -96,6 +96,6 @@ def load_plugin(path :str): # -> module (not sure how to write that in type defi
 				plugins[namespace] = sys.modules[namespace].Plugin()
 			except Exception as err:
 				log(err, level=logging.ERROR)
-				log(f"The above error was detected when initiating the plugin: {path}", fg="red", level=logging.ERROR)
+				log(f"O erro acima foi detectado ao iniciar o plug-in: {path}", fg="red", level=logging.ERROR)
 		else:
-			log(f"Plugin '{path}' is missing a valid entry-point or is corrupt.", fg="yellow", level=logging.WARNING)
+			log(f"Plugin '{path}' está faltando um ponto de entrada válido ou está corrompido.", fg="yellow", level=logging.WARNING)
